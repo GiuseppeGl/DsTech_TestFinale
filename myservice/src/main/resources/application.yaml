@@ -1,0 +1,11 @@
+spring:
+  name: server-template
+  datasource:
+    url: jdbc:mysql://localhost:3306/biblioteca?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 03571590!Massi
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update #none
+    show-sql: true
