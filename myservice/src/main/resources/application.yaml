@@ -1,7 +1,7 @@
 spring:
   name: server-template
   datasource:
-    url: jdbc:mysql://localhost:3306/biblioteca?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/gestione_ordini?allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: 03571590!Massi
   jpa:

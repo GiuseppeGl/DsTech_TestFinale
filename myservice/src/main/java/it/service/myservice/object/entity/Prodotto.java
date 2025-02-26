@@ -1,4 +1,6 @@
-package it.service.myservice.object.model;
+package it.service.myservice.object.entity;
+
+
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,26 +9,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "books")
+@Table(name = "prodotti")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Book {
+public class Prodotto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String titolo;
+    private String nome;
 
     @Column(nullable = false)
-    private String autore;
-
-    @Column(name = "anno_pubblicazione", nullable = false)
-    private Integer annoPubblicazione;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private Boolean disponibile = true;
+    private Double prezzo;
 }

@@ -1,16 +1,17 @@
 package it.service.myservice.object.dto;
 
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class BookDTO {
+@AllArgsConstructor
+@Builder
+public class ProdottoDTO {
     private Long id;
-    private String titolo;
-    private String autore;
-    private Integer annoPubblicazione;
-    private Boolean disponibile;
+    private String nome;
+    private Double prezzo;
 }
