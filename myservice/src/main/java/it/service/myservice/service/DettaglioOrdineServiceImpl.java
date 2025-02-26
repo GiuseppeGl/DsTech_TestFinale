@@ -1,6 +1,7 @@
 package it.service.myservice.service;
 
 import it.service.myservice.exception.ResourceNotFoundException;
+import it.service.myservice.mapper.DettaglioOrdineMapper;
 import it.service.myservice.object.dto.DettaglioOrdineCreateDTO;
 import it.service.myservice.object.dto.DettaglioOrdineDTO;
 import it.service.myservice.object.entity.DettaglioOrdine;
@@ -11,7 +12,6 @@ import it.service.myservice.repository.OrdineRepository;
 import it.service.myservice.repository.ProdottoRepository;
 import it.service.myservice.service.DettaglioOrdineService;
 import it.service.myservice.service.OrdineService;
-import it.service.myservice.tools.DevTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +25,7 @@ public class DettaglioOrdineServiceImpl implements DettaglioOrdineService {
     private final OrdineRepository ordineRepository;
     private final ProdottoRepository prodottoRepository;
     private final OrdineService ordineService;
+    private final DettaglioOrdineMapper dettaglioOrdineMapper;
 
     @Override
     @Transactional
@@ -35,10 +36,9 @@ public class DettaglioOrdineServiceImpl implements DettaglioOrdineService {
         Prodotto prodotto = prodottoRepository.findById(dettaglioOrdineCreateDTO.getProdottoId())
                 .orElseThrow(() -> new ResourceNotFoundException("Prodotto non trovato con id: " + dettaglioOrdineCreateDTO.getProdottoId()));
 
-        DettaglioOrdine dettaglioOrdine = new DettaglioOrdine();
+        DettaglioOrdine dettaglioOrdine = dettaglioOrdineMapper.toEntity(dettaglioOrdineCreateDTO);
         dettaglioOrdine.setOrdine(ordine);
         dettaglioOrdine.setProdotto(prodotto);
-        dettaglioOrdine.setQuantita(dettaglioOrdineCreateDTO.getQuantita());
 
         // Calcolo del prezzo totale del dettaglio
         double prezzoTotale = prodotto.getPrezzo() * dettaglioOrdineCreateDTO.getQuantita();
@@ -49,6 +49,6 @@ public class DettaglioOrdineServiceImpl implements DettaglioOrdineService {
         // Aggiorna il totale dell'ordine
         ordineService.calcolaTotaleOrdine(ordine.getId());
 
-        return DevTools.convertToDTO(dettaglioOrdine);
+        return dettaglioOrdineMapper.toDto(dettaglioOrdine);
     }
 }
