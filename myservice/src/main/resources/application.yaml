@@ -1,5 +1,7 @@
 spring:
   name: server-template
+  profiles:
+    active: dev
   datasource:
     url: jdbc:mysql://localhost:3306/gestione_ordini?allowPublicKeyRetrieval=true&useSSL=false
     username: root

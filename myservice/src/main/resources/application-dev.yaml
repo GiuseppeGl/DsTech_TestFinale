@@ -1,0 +1,21 @@
+spring:
+  name: server-template
+  datasource:
+    url: jdbc:mysql://localhost:3306/gestione_ordini?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 03571590!Massi
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update # Crea/aggiorna le tabelle automaticamente
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# Configurazione logging per vedere i messaggi di inizializzazione
+logging:
+  level:
+    it.service.myservice.config: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO
