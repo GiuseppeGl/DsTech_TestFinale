@@ -9,7 +9,6 @@ import it.service.myservice.object.entity.Ordine;
 import it.service.myservice.object.entity.Utente;
 import it.service.myservice.repository.OrdineRepository;
 import it.service.myservice.repository.UtenteRepository;
-import it.service.myservice.service.OrdineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Implementazione del servizio per la gestione degli ordini.
+ * Fornisce la logica di business per operazioni su ordini.
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -83,5 +86,47 @@ public class OrdineServiceImpl implements OrdineService {
 
         ordine.setTotale(totale);
         ordineRepository.save(ordine);
+    }
+
+    /**
+     * Implementazione per calcolare il totale speso da un utente.
+     * Utilizza una query JPQL ottimizzata tramite il repository.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Double getTotaleSpesoDaUtente(Long utenteId) {
+        // Verifichiamo prima che l'utente esista
+        if (!utenteRepository.existsById(utenteId)) {
+            throw new ResourceNotFoundException("Utente non trovato con id: " + utenteId);
+        }
+
+        // Utilizziamo il metodo ottimizzato del repository
+        Double totale = ordineRepository.calculateTotaleSpesoDaUtente(utenteId);
+
+        // Se non ci sono ordini, restituiamo 0
+        return totale != null ? totale : 0.0;
+    }
+
+    /**
+     * Implementazione per recuperare ordini in un intervallo di date.
+     * Include validazione dell'input e conversione dei risultati.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrdineDTO> getOrdiniInIntervalloDiDate(LocalDate startDate, LocalDate endDate) {
+        // Validazione dell'input
+        if (startDate == null || endDate == null) {
+            throw new IllegalArgumentException("Le date di inizio e fine sono obbligatorie");
+        }
+
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("La data di inizio non può essere successiva alla data di fine");
+        }
+
+        // Recupero degli ordini nell'intervallo di date
+        List<Ordine> ordini = ordineRepository.findByDataBetween(startDate, endDate);
+
+        // Conversione e restituzione dei DTO
+        return ordineMapper.toDtoList(ordini);
     }
 }
